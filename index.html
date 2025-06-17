@@ -39,20 +39,36 @@
   <ul id="news-list">Loading...</ul>
 
   <script>
-    async function fetchNews() {
-      const response = await fetch('https://newsapi.org/v2/everything?q=international+students&sortBy=publishedAt&apiKey=37abb35be6a8436c80717ea8e89573da');
-      const data = await response.json();
-      const newsList = document.getElementById('news-list');
-      newsList.innerHTML = '';
-      data.articles.forEach(article => {
-        const li = document.createElement('li');
-        li.innerHTML = \`<a href="\${article.url}" target="_blank">\${article.title}</a>\`;
-        newsList.appendChild(li);
-      });
+  async function fetchNews() {
+  const newsList = document.getElementById('news-list');
+  newsList.innerHTML = 'Loading...';
+
+  try {
+    const response = await fetch('https://newsapi.org/v2/everything?q=international+students&sortBy=publishedAt&apiKey=YOUR_API_KEY_HERE');
+    if (!response.ok) {
+      throw new Error(`Error: ${response.status} ${response.statusText}`);
+    }
+    const data = await response.json();
+    newsList.innerHTML = '';
+
+    if (data.articles.length === 0) {
+      newsList.innerHTML = 'No news articles found.';
+      return;
     }
 
-    fetchNews();
-    setInterval(fetchNews, 86400000); // Refresh every 24 hours
+    data.articles.forEach(article => {
+      const li = document.createElement('li');
+      li.innerHTML = `<a href="${article.url}" target="_blank">${article.title}</a>`;
+      newsList.appendChild(li);
+    });
+  } catch (error) {
+    newsList.innerHTML = 'Failed to load news: ' + error.message;
+    console.error(error);
+  }
+}
+
+fetchNews();
+setInterval(fetchNews, 86400000);
   </script>
 </body>
 </html>
