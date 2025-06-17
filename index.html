@@ -44,7 +44,7 @@
   newsList.innerHTML = 'Loading...';
 
   try {
-    const response = await fetch('https://newsapi.org/v2/everything?q=international+students&sortBy=publishedAt&apiKey=YOUR_API_KEY_HERE');
+    const response = await fetch('https://newsapi.org/v2/everything?q=international+students&sortBy=publishedAt&apiKey=37abb35be6a8436c80717ea8e89573da');
     if (!response.ok) {
       throw new Error(`Error: ${response.status} ${response.statusText}`);
     }
