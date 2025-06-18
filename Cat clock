@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Cat Clock</title>
+  <style>
+    body {
+      margin: 0;
+      background: #f0f0f0;
+      overflow: hidden;
+      font-family: Arial, sans-serif;
+    }
+
+    #clock {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 48px;
+      color: #2c3e50;
+      z-index: 2;
+    }
+
+    #cat {
+      position: absolute;
+      width: 100px;
+      height: 100px;
+      background: gray;
+      border-radius: 50% 50% 40% 40%;
+      z-index: 1;
+      box-shadow: inset 0 0 5px #00000033;
+    }
+
+    /* Optional: Add little ears for fun */
+    #cat::before,
+    #cat::after {
+      content: "";
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background: gray;
+      top: 0;
+      border-radius: 50%;
+    }
+
+    #cat::before {
+      left: 10px;
+      transform: rotate(-30deg);
+    }
+
+    #cat::after {
+      right: 10px;
+      transform: rotate(30deg);
+    }
+  </style>
+</head>
+<body>
+  <div id="clock">Loading...</div>
+  <div id="cat"></div>
+
+  <script>
+    // Set up time display (ET)
+    function updateTime() {
+      const clock = document.getElementById("clock");
+      const now = new Date();
+
+      // Convert to ET (Eastern Time)
+      const options = {
+        timeZone: "America/New_York",
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+        hour12: false,
+      };
+
+      const timeString = new Intl.DateTimeFormat("en-US", options).format(now);
+      clock.textContent = timeString;
+    }
+
+    setInterval(updateTime, 1000);
+    updateTime(); // Initial call
+
+    // Animate the cat
+    const cat = document.getElementById("cat");
+    let angle = 0;
+    const radius = 150;
+    const centerX = window.innerWidth / 2;
+    const centerY = window.innerHeight / 2;
+
+    function animateCat() {
+      const x = centerX + radius * Math.cos(angle) - 50; // minus half cat width
+      const y = centerY + radius * Math.sin(angle) - 50; // minus half cat height
+      cat.style.left = `${x}px`;
+      cat.style.top = `${y}px`;
+
+      angle += 0.02; // adjust speed here
+      requestAnimationFrame(animateCat);
+    }
+
+    animateCat();
+  </script>
+</body>
+</html>
